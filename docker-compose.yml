@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+
+  mongo_ecommerce_dev:
+    image: mongo
+    container_name: mongo_ecommerce_dev
+    ports:
+      - ${DB_PORT}:27017
+    volumes:
+      - ./data:/data/db
+
+  node:
+    build: .
+    container_name: node_ecommerce_dev
+    # restart: always
+    ports:
+      - ${APP_PORT}:3000
+    depends_on:
+      - mongo_ecommerce_dev
+    volumes:
+      - .:/app
+      - /app/node_modules
