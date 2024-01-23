@@ -3,7 +3,7 @@ import userController from "./userController.js";
 import bcrypt from "bcrypt";
 import path from 'path';
 import fs from 'fs';
-
+import Jwt from "jsonwebtoken";
 
 
 
@@ -191,6 +191,26 @@ const isEmailValid = (email) => {
     return emailRegex.test(email);
 };
 
+const getIdFromToken = (cookies) => {
+    console.log("COOKIES",cookies)
+    if (!cookies) {
+        
+        return false;
+    }
+    
+    // Buscar la cookie llamada "token"
+    const tokenCookie = cookies
+        .split('; ')
+        .find(cookie => cookie.startsWith('token='));
+    
+    if (!tokenCookie) {
+       
+        return false;
+    }
+    const token = tokenCookie.split('=')[1];
+    const decoded = Jwt.verify(token, process.env.JWT_SECRET);
+    return decoded.id;
+}
 
 export default {
     getAllUsers,
@@ -198,7 +218,7 @@ export default {
     updateUser,
     removeUser,
     createUser,
-    
+    getIdFromToken,
     deactivateUser,
     getUsersessionId
 };

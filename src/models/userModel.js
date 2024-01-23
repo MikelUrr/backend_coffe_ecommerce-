@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
       type: Date,
       default: Date.now
   },
+  price: {
+    type: Number,
+    required: true,
+  },
     
   });
   
